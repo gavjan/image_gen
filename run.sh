@@ -10,17 +10,21 @@ function ctrl_c() {
 
 ctrl_c
 
-echo
-echo "Starting..."
 
 curl "$1" --silent --output index.html
+
 image_link=$(grep -o -a -m 1 -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.-]*.jpg" index.html | head -1)
 image_name=$(grep -o -a -m 1 -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.-]*.jpg" index.html | head -1 | grep -o "/[a-zA-Z0-9_.-]*.jpg" | grep -o "[a-zA-Z0-9_.-]*.jpg")
 image_name_no_extension="${image_name::-4}"
-
 price=$(grep -m 1 -A 1 "<span class=\"regular\">" index.html | grep -o "[0-9,]*" )
-
 brand_link=$(grep -o -a -m 1 -h -r "<div class=\"product-brnd-logo\"><img src=\"https://topsale.am/img/brands/[a-zA-Z0-9_.-]*\.svg\"></div>" index.html | head -1 | grep -o "https://topsale.am/img/brands/[a-zA-Z0-9_.-]*\.svg")
+
+item_name=$(grep -o -a -m 1 -h -r "<meta property=\"og:title\" content=\"TopSale.am - .*\" />" | grep -o "\"TopSale.am - .*\"")
+item_name="${item_name:14}"
+item_name="${item_name::-1}"
+
+echo
+printf "Starting $item_name"
 
 curl --silent "$image_link" --output input.jpg
 curl --silent "$brand_link" --output brand.svg

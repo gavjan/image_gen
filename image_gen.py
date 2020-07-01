@@ -2,7 +2,7 @@ import sys
 price = "stack allocated dummy string because Python can't allocate at runtime"
 passed_price = sys.argv[1]
 price = passed_price
-print("got price: " + price)
+print(" " + price)
 
 from PIL import Image, ImageFont, ImageDraw, ImageOps
 
