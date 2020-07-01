@@ -1,5 +1,8 @@
 import sys
-price = sys.argv[1]
+price = "stack allocated dummy string because Python can't allocate at runtime"
+passed_price = sys.argv[1]
+price = passed_price
+print("got price: " + price)
 
 from PIL import Image, ImageFont, ImageDraw, ImageOps
 
@@ -17,28 +20,23 @@ AMD_font = ImageFont.truetype("assets/sans-serif.ttf", 30)
 
 img = read_image("input.jpg")
 logo = read_image("assets/logo.png")
-#brand = read_image("brand.png").convert("RGBA")
+brand = read_image("brand.png").convert("RGBA")
 
-img = ImageOps.expand(image=img, border=100, fill='white')
+img_new = ImageOps.expand(image=img, border=100, fill='white')
+img = img_new
 
 width, height = img.size
+print("PASS")
 x_offset, y_offset = ImageDraw.Draw(img).textsize(price, price_font)
+
 ImageDraw.Draw(img).text((width - 320, height - 100), price, (205, 92, 92), price_font)
 
-img2 = img
-ImageDraw.Draw(img2).text((width - 320 + (x_offset+10), height - 70), "AMD", (205, 92, 92), AMD_font)
-
-
-
+ImageDraw.Draw(img).text((width - 320 + (x_offset+10), height - 70), "AMD", (205, 92, 92), AMD_font)
 
 img.paste(im=logo, box=(25, 25), mask=logo)
-#img3 = img
-#brand_x, brand_y = brand.size
-#img3.paste(im=brand, box=(width - 25 - brand_x, 25), mask=brand)
+brand_x, brand_y = brand.size
+img.paste(im=brand, box=(width - 25 - brand_x, 25), mask=brand)
 
 
 
 img.save('result.png')
-
-# img_arr = np.array(img)
-# result = Image.fromarray(img_arr)
