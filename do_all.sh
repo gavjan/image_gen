@@ -1,14 +1,18 @@
 declare -a arr=(
-"https://topsale.am/product/u.s.-polo-assn.-womens-classic-fit-pique-polo-shirt---white/15183/"
-"https://topsale.am/product/tommy-hilfiger-womens-short-sleeve-polo-flame/15172/"
-"https://topsale.am/product/ck-monogram-logo-camo-crewneck-cropped-t-shirt;-white/15076/"
-"https://topsale.am/product/u.s.-polo-assn.-juniors-lace-v-neck-t-shirt/15185/"
-"https://topsale.am/product/u.s.-polo-assn.-womens-slim-fit-pique-polo-shirt/15300/"
-"https://topsale.am/product/adidas-originals-3mc-sneaker,-black/14837/"
-"https://topsale.am/product/nike-star-runner-infants-trainers/14886/"
-"https://topsale.am/product/adidas-boys-lite-racer-2.0-k-sneaker,-blue/14889/"
-"https://topsale.am/product/avia-boys-avi-factor-sneaker/14890/"
-"https://topsale.am/product/avia-boys-avi-ryder-sneaker,-flame/14891/"
+"https://topsale.am/product/tommy-hilfiger-womens-short-sleeve-polo-sky-captain/15170/"
+"https://topsale.am/product/tommy-hilfiger-womens-short-sleeve-polo-black/15174/"
+"https://topsale.am/product/tommy-hilfiger-mens-short-sleeve-polo-shirt-in-classic-fit-blue/14938/"
+"https://topsale.am/product/tommy-hilfiger-mens-short-sleeve-polo-shirt-in-classic-fit-sky-blue/14941/"
+"https://topsale.am/product/pierre-cardin-tipped-polo-shirt-mens-navy/15239/"
+"https://topsale.am/product/pierre-cardin-cut-and-sew-printed-polo-mens/15235/"
+"https://topsale.am/product/pierre-cardin-tipped-polo-shirt-mens-choral-marl-l/15240/"
+"https://topsale.am/product/ck-colorblock-split-logo-crewneck-t-shirt-blue-s/14850/"
+"https://topsale.am/product/ck-colorblock-split-logo-crewneck-t-shirt-black/14809/"
+"https://topsale.am/product/ck-circular-monogram-logo-crewneck-t-shirt/14852/"
+"https://topsale.am/product/u.s.-polo-assn.-mens-classic-fit-color-block-short-sleeve-/15088/"
+"https://topsale.am/product/u.s.-polo-assn.-mens-short-sleeve-classic-fit-fancy-pique-polo-shirt/15085/"
+"https://topsale.am/product/adidas-must-haves-emblem-tee/14810/"
+"https://topsale.am/product/puma-camo-logo-qt-t-shirt-mens-black-camo/15251/"
 )
 
 
