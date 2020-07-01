@@ -17,7 +17,13 @@ price=$(grep -m 1 -A 1 "<span class=\"regular\">" index.html | grep -o "[0-9,]*"
 
 wget "$image_link"
 mv "$image_name" input.jpg
-python image_gen.py "$price"
+
+if [ ! -f input.jpg ]; then
+    >&2 echo "[ERROR] Image Download Failed"
+    exit 1
+else
+  python image_gen.py "$price"
+fi
 
 if [ ! -d results ]; then
   mkdir results
