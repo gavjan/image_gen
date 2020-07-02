@@ -5,7 +5,7 @@
 ```
 example:
 ```shell script
-./run.sh "https://topsale.am/product/hm-lace-dress-white/14971/"
+./run.sh "https://topsale.am/product/adidas-must-haves-emblem-tee/14810/"
 ```
 
 ## Examples generated
