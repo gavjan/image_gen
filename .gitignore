@@ -127,5 +127,5 @@ dmypy.json
 
 # Project Specific
 .idea/*
-do_all.sh
+do_all*
 results/*
