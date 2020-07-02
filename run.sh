@@ -17,7 +17,7 @@ image_link=$(grep -o -a -m 1 -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.-
 image_name=$(grep -o -a -m 1 -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.-]*.jpg" index.html | head -1 | grep -o "/[a-zA-Z0-9_.-]*.jpg" | grep -o "[a-zA-Z0-9_.-]*.jpg")
 image_name_no_extension="${image_name::-4}"
 price=$(grep -m 1 -A 1 "<span class=\"regular\">" index.html | grep -o "[0-9,]*" )
-brand_link=$(grep -o -a -m 1 -h -r "<div class=\"product-brnd-logo\"><img src=\"https://topsale.am/img/brands/[a-zA-Z0-9_.-]*\.svg\"></div>" index.html | head -1 | grep -o "https://topsale.am/img/brands/[a-zA-Z0-9_.-]*\.svg")
+brand_link=$(grep -o -a -m 1 -h -r "<div class=\"product-brnd-logo\"><img src=\"https://topsale.am/img/brands/.*\.svg\"></div>" index.html | head -1 | grep -o "https://topsale.am/img/brands/.*\.svg")
 
 item_name=$(grep -o -a -m 1 -h -r "<meta property=\"og:title\" content=\"TopSale.am - .*\" />" | grep -o "\"TopSale.am - .*\"")
 item_name="${item_name:14}"
@@ -31,7 +31,15 @@ curl --silent "$brand_link" --output brand.svg
 
 inkscape -p brand.svg -o brand.png 2> /dev/null
 if [ ! -f input.jpg ]; then
-    >&2 echo "[ERROR] Image Download Failed"
+    echo
+    >&2 echo "[ERROR] Product Image Download Failed"
+    ls
+    ctrl_c
+    exit 1
+elif [ ! -f brand.png ]; then
+    echo
+    >&2 echo "[ERROR] Brand Image Download Failed"
+    echo "$brand_link"
     ctrl_c
     exit 1
 else
