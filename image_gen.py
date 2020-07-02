@@ -21,8 +21,11 @@ AMD_font = ImageFont.truetype("assets/sans-serif.ttf", 30)
 img = read_image("input.jpg")
 logo = read_image("assets/logo.png")
 brand = read_image("brand.png").convert("RGBA")
+original_img_x, original_img_y = img.size
+pixels = img.load()
+back_color = pixels[original_img_x-1,0]
 
-img_new = ImageOps.expand(image=img, border=100, fill='white')
+img_new = ImageOps.expand(image=img, border=100, fill=back_color)
 img = img_new
 
 width, height = img.size
