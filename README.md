@@ -2,10 +2,12 @@
 
 ```shell script
 ./run.sh <product_link>
+./split_run.sh <product_link>
 ```
 example:
 ```shell script
 ./run.sh "https://topsale.am/product/adidas-must-haves-emblem-tee/14810/"
+./split_run.sh "https://topsale.am/product/adidas-essentials-linear-tights/14990/"
 ```
 
 ## Examples generated
