@@ -23,7 +23,6 @@ item_name=$(grep -o -a -m 1 -h -r "<meta property=\"og:title\" content=\"TopSale
 item_name="${item_name:14}"
 item_name="${item_name::-1}"
 
-echo
 printf "Starting $item_name"
 
 curl --silent "$image_link" --output input.jpg
