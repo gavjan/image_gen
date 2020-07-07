@@ -46,9 +46,19 @@ else
   python image_gen.py $parsed_price
 fi
 
-if [ ! -d results ]; then
-  mkdir results
+
+if [ $# -eq 2 ]; then
+  if [ ! -d results/$2 ]; then
+    mkdir -p results/$2
+  fi
+  mv result.png results/$2/"$image_name_no_extension".png
+else
+  if [ ! -d results ]; then
+    mkdir results
+  fi
+  mv result.png results/"$image_name_no_extension".png
 fi
-mv result.png results/"$image_name_no_extension".png
+
+
 
 ctrl_c "$image_name"
