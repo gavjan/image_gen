@@ -1,3 +1,4 @@
+# ./run.sh <product_link> (optional)<set_number>
 trap ctrl_c INT
 function ctrl_c() {
 	rm index.html 2> /dev/null
@@ -18,7 +19,6 @@ image_name=$(grep -o -a -m 1 -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.-
 image_name_no_extension="${image_name::-4}"
 price=$(grep -m 1 -A 1 "<span class=\"regular\">" index.html | grep -o "[0-9,]*" )
 brand_link=$(grep -o -a -m 1 -h -r "<div class=\"product-brnd-logo\"><img src=\"https://topsale.am/img/brands/.*\.svg\"></div>" index.html | head -1 | grep -o "https://topsale.am/img/brands/.*\.svg")
-
 item_name=$(grep -o -a -m 1 -h -r "<meta property=\"og:title\" content=\"TopSale.am - .*\" />" | grep -o "\"TopSale.am - .*\"")
 item_name="${item_name:14}"
 item_name="${item_name::-1}"
