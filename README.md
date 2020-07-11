@@ -24,3 +24,16 @@ example:
   <img src="examples/split_image/3385f05229575dbad629asjkhdhsa.png" height="350" width="350" title="Click to Open">
   <img src="examples/split_image/c464fd10360ada381b76hjvhjvghj.png" height="350" width="350" title="Click to Open">
 </p>
+
+# Everything combined
+`todo.html` should contain product links.
+
+The script will automatically parse links from `todo.html` and download their images alongside their metadata such as price and brand.
+Then the script will generate a product video with pictures from directory `results`, end-screen logo `assets/end_logo.png` and with music from `music/music.mp3`:
+```shell script
+./do_all.sh
+```
+
+## Video example
+
+Video example can be found at `examples/example_vid.mp4`
