@@ -51,7 +51,7 @@ if [ $# -eq 2 ]; then
   if [ ! -d results/$2 ]; then
     mkdir -p results/$2
   fi
-  mv result.png results/$2/"$image_name_no_extension".png
+  mv result.png results/$2/set_res.png
 else
   if [ ! -d results ]; then
     mkdir results

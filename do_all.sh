@@ -1,11 +1,16 @@
 trap ctrl_c INT
 function ctrl_c() {
-  rm -f results/*
+  rm -rf results/*
   vid/no_audio.mov
   exit 0
 }
 
-rm -f results/*
+rm -rf results/*
+#------------Settings-------------
+use_set=true
+set_len=2
+#---------------------------------
+
 
 declare -a arr=(
 "https://topsale.am/product/karl-speckled-twofer-sweater/15223/"
@@ -24,14 +29,38 @@ set=1
 for i in "${arr[@]}"; do
   echo "$i"
   printf "[%d/%d] " $ctr $len
-    ./run.sh "$i" # for individual
-    #./run.sh $i $set # for sets
-  if ! ((ctr % 3)); then
+    if [ "$use_set" = true ]; then
+      ./run.sh $i $set # for sets
+      num=$(((ctr % set_len)))
+      if ! ((num)); then
+        num=3
+      fi
+      mv "results/$set/set_res.png" "results/$set/$num.png"
+    else
+      ./run.sh "$i" # for individual
+    fi
+
+  if ! ((ctr % set_len)); then
     set=$((set+1))
   fi
   ctr=$((ctr+1))
   echo
 done
+
+if [ "$use_set" = true ]; then
+  res=$(ls results | grep -o "[0-9]*")
+  for i in $res; do
+  	set=$(find "results/$i/" | grep "results/[0-9]*/.*\.png")
+  	k=1
+  	for j in $set; do
+  		mv "$j" "results/$i$k.png"
+  		k=$((k+1))
+  	done
+  	rmdir "results/$i"
+  done
+fi
+
+
 
 
 cp assets/end_logo.png results/z_logo.png
