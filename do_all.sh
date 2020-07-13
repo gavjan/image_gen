@@ -11,10 +11,10 @@ use_set=false
 set_len=2
 #---------------------------------
 arr=""
-if [ -f todo.html ]; then
-  arr=($(cat todo.html | grep -o "https://topsale.am/product/[a-z0-9;_&,\./\-]*"))
+if [ -f input/todo.html ]; then
+  arr=($(cat input/todo.html | grep -o "https://topsale.am/product/[a-z0-9;_&,\./\-]*"))
 else
-  echo >&2 "todo.html is missing"
+  echo >&2 "input/todo.html is missing"
   exit 1
 fi
 if [ ! -f input/music/music.mp3 ]; then
