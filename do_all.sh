@@ -10,7 +10,7 @@ rm -rf results/*
 use_set=false
 set_len=2
 #---------------------------------
-
+arr=""
 if [ -f todo.html ]; then
   arr=($(cat todo.html | grep -o "https://topsale.am/product/[a-z0-9;_&,\./\-]*"))
 else
@@ -66,6 +66,6 @@ image_count=$((len + 2))
 ./make_ffmpeg.sh "$image_count"
 rm results/z_logo.png results/zz_logo.png
 
-ffmpeg -y -i "vid/no_audio.mov" -i music/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
+ffmpeg -y -i "vid/no_audio.mov" -i input/music/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
 
 ctrl_c
