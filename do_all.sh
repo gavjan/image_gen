@@ -17,8 +17,8 @@ else
   echo >&2 "input/todo.html is missing"
   exit 1
 fi
-if [ ! -f input/music/music.mp3 ]; then
-  echo >&2 "music.mp3 is missing please place music at input/music/music.mp3"
+if [ ! -f input/music.mp3 ]; then
+  echo >&2 "music.mp3 is missing please place music at input/music.mp3"
   exit 1
 fi
 len="${#arr[@]}"
@@ -66,6 +66,6 @@ image_count=$((len + 2))
 ./make_ffmpeg.sh "$image_count"
 rm results/z_logo.png results/zz_logo.png
 
-ffmpeg -y -i "vid/no_audio.mov" -i input/music/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
+ffmpeg -y -i "vid/no_audio.mov" -i input/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
 
 ctrl_c
