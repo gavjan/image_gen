@@ -11,14 +11,14 @@ use_set=false
 set_len=2
 #---------------------------------
 
-declare -a arr=(
-  "https://topsale.am/product/karl-speckled-twofer-sweater/15223/"
-)
 if [ -f todo.html ]; then
   arr=($(cat todo.html | grep -o "https://topsale.am/product/[a-z0-9;_&,\./\-]*"))
+else
+  echo >&2 "todo.html is missing"
+  exit 1
 fi
-if [ ! -f music/music.mp3 ]; then
-  echo >&2 "music.mp3 is missing please place music at music/music.mp3"
+if [ ! -f input/music/music.mp3 ]; then
+  echo >&2 "music.mp3 is missing please place music at input/music/music.mp3"
   exit 1
 fi
 len="${#arr[@]}"
@@ -38,7 +38,6 @@ for i in "${arr[@]}"; do
   else
     ./run.sh "$i" # for individual
   fi
-
 
   if ! ((ctr % set_len)); then
     set=$((set + 1))
