@@ -1,7 +1,7 @@
 trap ctrl_c INT
 function ctrl_c() {
   rm -rf results/*
-  vid/no_audio.mov
+  rm -f vid/no_audio.mov
   exit 0
 }
 
