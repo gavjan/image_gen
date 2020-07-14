@@ -10,15 +10,15 @@ rm -rf results/*
 use_set=false
 set_len=2
 #---------------------------------
-
-declare -a arr=(
-  "https://topsale.am/product/karl-speckled-twofer-sweater/15223/"
-)
-if [ -f todo.html ]; then
-  arr=($(cat todo.html | grep -o "https://topsale.am/product/[a-z0-9;_&,\./\-]*"))
+arr=""
+if [ -f input/todo.html ]; then
+  arr=($(cat input/todo.html | grep -o "https://topsale.am/product/[a-z0-9;_&,\./\-]*"))
+else
+  echo >&2 "input/todo.html is missing"
+  exit 1
 fi
-if [ ! -f music/music.mp3 ]; then
-  echo >&2 "music.mp3 is missing please place music at music/music.mp3"
+if [ ! -f input/music.mp3 ]; then
+  echo >&2 "music.mp3 is missing please place music at input/music.mp3"
   exit 1
 fi
 len="${#arr[@]}"
@@ -38,7 +38,6 @@ for i in "${arr[@]}"; do
   else
     ./run.sh "$i" # for individual
   fi
-
 
   if ! ((ctr % set_len)); then
     set=$((set + 1))
@@ -67,6 +66,10 @@ image_count=$((len + 2))
 ./make_ffmpeg.sh "$image_count"
 rm results/z_logo.png results/zz_logo.png
 
-ffmpeg -y -i "vid/no_audio.mov" -i music/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
-
+ffmpeg -y -i "vid/no_audio.mov" -i input/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
+if [ $? -eq 1 ]; then
+  printf "\n--\n"
+  read -p "Video Failed. Press enter to continue"
+fi
 ctrl_c
+
