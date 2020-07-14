@@ -71,5 +71,6 @@ if [ $? -eq 1 ]; then
   printf "\n--\n"
   read -p "Video Failed. Press enter to continue"
 fi
+mpv vid/output.mov
 ctrl_c
 
