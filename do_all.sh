@@ -68,6 +68,5 @@ image_count=$((len + 2))
 rm results/z_logo.png results/zz_logo.png
 
 ffmpeg -y -i "vid/no_audio.mov" -i music/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
-mpv vid/output.mov
 
 ctrl_c
