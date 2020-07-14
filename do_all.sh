@@ -73,4 +73,3 @@ if [ $? -eq 1 ]; then
 fi
 mpv vid/output.mov
 ctrl_c
-
