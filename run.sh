@@ -28,7 +28,7 @@ printf "Starting $item_name"
 curl --silent "$image_link" --output input.jpg
 curl --silent "$brand_link" --output brand.svg
 
-inkscape -p brand.svg -o brand.png 2> /dev/null
+cairosvg brand.svg -o brand.png #2> /dev/null
 if [ ! -f input.jpg ]; then
     echo
     >&2 echo "[ERROR] Product Image Download Failed"
@@ -43,7 +43,7 @@ elif [ ! -f brand.png ]; then
     exit 1
 else
   parsed_price="$price"
-  python image_gen.py $parsed_price
+  venv/bin/python image_gen.py $parsed_price
 fi
 
 
