@@ -11,7 +11,6 @@ function ctrl_c() {
 
 ctrl_c
 
-
 curl "$1" --silent --output index.html
 
 image_link=$(grep -o -a -m 1 -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.-]*.jpg" index.html | head -1)
@@ -43,7 +42,7 @@ elif [ ! -f brand.png ]; then
     exit 1
 else
   parsed_price="$price"
-  venv/bin/python image_gen.py $parsed_price
+  python3 image_gen.py $parsed_price
 fi
 
 
