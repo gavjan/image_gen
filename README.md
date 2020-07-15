@@ -16,13 +16,6 @@ example:
   <img src="examples/standard/b66c77c454bef8cb323baaa.png" height="350" width="350" title="Click to Open">
 </p>
 
-## Split Images Examples generated
-<p align="center">
-  <img src="examples/split_image/9b9f3dbc4006e8350a9cUntitled-1.png" height="350" width="350" title="Click to Open">
-  <img src="examples/split_image/89b68cf09b3851fbc731jdsijs.png" height="350" width="350" title="Click to Open">
-  <img src="examples/split_image/c464fd10360ada381b76hjvhjvghj.png" height="350" width="350" title="Click to Open">
-</p>
-
 # Everything combined
 `input/todo.html` should contain product links.
 
