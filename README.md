@@ -25,10 +25,10 @@ example:
 </p>
 
 # Everything combined
-`todo.html` should contain product links.
+`input/todo.html` should contain product links.
 
-The script will automatically parse links from `todo.html` and download their images alongside their metadata such as price and brand.
-Then the script will generate a product video with pictures from directory `results`, end-screen logo `assets/end_logo.png` and with music from `music/music.mp3`:
+The script will automatically parse links from `input/todo.html` and download their images alongside their metadata such as price and brand.
+Then the script will generate a product video with pictures from directory `results`, end-screen logo `assets/end_logo.png` and with music from `input/music.mp3`:
 ```shell script
 ./do_all.sh
 ```
