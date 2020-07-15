@@ -1,5 +1,6 @@
-# Generate product photos from product page
+# Generate product photos/videos from Topsale.am product page
 
+To generate a product image
 ```shell script
 ./run.sh <product_link>
 ```
