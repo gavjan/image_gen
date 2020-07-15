@@ -1,4 +1,8 @@
 # ./run.sh <product_link> (optional)<set_number>
+
+#------------Settings-------------
+split=false
+#---------------------------------
 trap ctrl_c INT
 function ctrl_c() {
 	rm index.html 2> /dev/null
@@ -42,7 +46,11 @@ elif [ ! -f brand.png ]; then
     exit 1
 else
   parsed_price="$price"
-  python3 image_gen.py $parsed_price
+  if [ "$split" = true ]; then
+    python3 split.py $parsed_price
+  else
+    python3 image_gen.py $parsed_price
+  fi
 fi
 
 

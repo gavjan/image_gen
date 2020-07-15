@@ -1,3 +1,7 @@
+#------------Settings-------------
+use_set=false
+set_len=2
+#---------------------------------
 trap ctrl_c INT
 function ctrl_c() {
   rm -rf results/*
@@ -6,10 +10,7 @@ function ctrl_c() {
 }
 
 rm -rf results/*
-#------------Settings-------------
-use_set=false
-set_len=2
-#---------------------------------
+
 arr=""
 if [ -f input/todo.html ]; then
   arr=($(cat input/todo.html | grep -o "https://topsale.am/product/[a-z0-9;_&,\./\-]*"))
