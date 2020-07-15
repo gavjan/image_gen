@@ -1,5 +1,5 @@
 import sys
-price = "stack allocated dummy string because Python can't allocate at runtime"
+price = "stack allocated dummy string because Python can't properly allocate at runtime"
 passed_price = sys.argv[1]
 price = passed_price
 print(" " + price)
@@ -15,31 +15,32 @@ def read_image(path):
         print("[ERROR] error opening " + path)
 
 
-price_font = ImageFont.truetype("assets/sans-serif.ttf", 60)
-AMD_font = ImageFont.truetype("assets/sans-serif.ttf", 30)
+price_font = ImageFont.truetype("assets/montserrat-bold.ttf", 36)
+AMD_font = ImageFont.truetype("assets/montserrat-bold.ttf", 18)
 
 img = read_image("input.jpg")
-logo = read_image("assets/logo.png")
+foreground = read_image("assets/foreground.png")
 brand = read_image("brand.png").convert("RGBA")
-original_img_x, original_img_y = img.size
-pixels = img.load()
-back_color = pixels[original_img_x-1,0]
-
-img_new = ImageOps.expand(image=img, border=100, fill=back_color)
-img = img_new
-
 width, height = img.size
+pixels = img.load()
+back_color = pixels[width-1,0]
+
 print("PASS")
-x_offset, y_offset = ImageDraw.Draw(img).textsize(price, price_font)
 
-ImageDraw.Draw(img).text((width - 320, height - 100), price, (205, 92, 92), price_font)
+img.paste(im=foreground, box=(0,0), mask=foreground)
 
-ImageDraw.Draw(img).text((width - 320 + (x_offset+10), height - 70), "AMD", (205, 92, 92), AMD_font)
-
-img.paste(im=logo, box=(25, 25), mask=logo)
 brand_x, brand_y = brand.size
-img.paste(im=brand, box=(width - 25 - brand_x, 25), mask=brand)
+white_back_x = 298
+white_back_y = 48
+size = white_back_x, white_back_y
+brand.thumbnail(size, Image.ANTIALIAS)
+brand_padding_x = int((white_back_x - brand_x)/2)
+img.paste(im=brand, box=(brand_padding_x, height - white_back_y - 2), mask=brand)
 
-
+price_offset_x, price_offset_y = ImageDraw.Draw(img).textsize(price, price_font)
+AMD_offset_x, AMD_offset_y = ImageDraw.Draw(img).textsize("AMD", AMD_font)
+price_padding_x = price_offset_x + AMD_offset_x + 3 + 25
+ImageDraw.Draw(img).text((width - price_padding_x, height - 50), price, (255, 255, 255), price_font)
+ImageDraw.Draw(img).text((width - price_padding_x + price_offset_x + 3, height - 32), "AMD", (255, 255, 255), AMD_font)
 
 img.save('result.png')
