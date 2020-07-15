@@ -17,8 +17,8 @@ example:
 </p>
 
 # Everything combined
-`input/todo.html` should contain product links.
-`input/music.mp3` music to be used in the video
+- `input/todo.html` should contain product links.
+- `input/music.mp3` music to be used in the video
 
 The script will automatically parse links from `input/todo.html` and download their images alongside their metadata such as price and brand.
 Then the script will make a product video with the generated pictures and the provided music track:
