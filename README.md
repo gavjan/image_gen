@@ -35,4 +35,4 @@ Then the script will generate a product video with pictures from directory `resu
 
 ## Video example
 
-Video example can be found at `examples/example_vid.mp4`
+Video example can be found at `examples/example_vid.mov`
