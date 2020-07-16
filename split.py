@@ -35,15 +35,6 @@ left_border = -1
 right_border = original_img_x-1
 possible_border_left = True
 possible_border_right = True
-print("fuck this")
-print("fuck this")
-print("fuck this")
-print("fuck this")
-print("fuck this")
-print("fuck this")
-print("fuck this")
-print("fuck this")
-print("fuck this")
 for x in range(original_img_x):
     possible_border = True
     for y in range(original_img_y):
@@ -125,6 +116,6 @@ logo_x = original_img_x - logo_size_x - logo_offset_x
 logo_y = original_img_y - logo_size_y - logo_offset_y
 img.paste(im=logo, box=(logo_x, logo_y-10), mask=logo)
 
-img.save('fuck.png')
+img.save('last.png')
 img.save('result.png')
 print("PASS")
