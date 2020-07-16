@@ -17,10 +17,11 @@ example:
 </p>
 
 # Everything combined
-`input/todo.html` should contain product links.
+- `input/todo.html` should contain product links.
+- `input/music.mp3` music to be used in the video
 
 The script will automatically parse links from `input/todo.html` and download their images alongside their metadata such as price and brand.
-Then the script will generate a product video with pictures from directory `results`, end-screen logo `assets/end_logo.png` and with music from `input/music.mp3`:
+Then the script will make a product video with the generated pictures and the provided music track:
 ```shell script
 ./do_all.sh
 ```
