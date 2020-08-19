@@ -7,7 +7,7 @@
 # SETTINGS
 input_dir="results/"  # Replace this by a path to your folder /path/to/your/folder
 n_files=$1                        # Replace this by a number of images
-files=`ls ${input_dir}/*.png | head -${n_files}`  # Change the file type to the correct type of your images
+files=`ls ${input_dir}/*.jpg | head -${n_files}`  # Change the file type to the correct type of your images
 output_file="vid/no_audio.mov"           # Name of output video
 if [ ! -d vid ]; then
     mkdir vid

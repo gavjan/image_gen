@@ -55,7 +55,7 @@ for x in range(original_img_x):
 #     pixels[left_border, y] = (255, 0, 0)
 # for y in range(original_img_y):
 #     pixels[right_border, y] = (255, 0, 0)
-# img.save('debug.png')
+# img.save('debug.jpg')
 
 img_padding = int((original_img_x/2 - (right_border - left_border))/2)
 right_border+=img_padding
@@ -116,6 +116,6 @@ logo_x = original_img_x - logo_size_x - logo_offset_x
 logo_y = original_img_y - logo_size_y - logo_offset_y
 img.paste(im=logo, box=(logo_x, logo_y-10), mask=logo)
 
-img.save('last.png')
-img.save('result.png')
+img.save('last.jpg')
+img.save('result.jpg')
 print("PASS")

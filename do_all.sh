@@ -35,7 +35,7 @@ for i in "${arr[@]}"; do
     if ! ((num)); then
       num=3
     fi
-    mv "results/$set/set_res.png" "results/$set/$num.png"
+    mv "results/$set/set_res.jpg" "results/$set/$num.jpg"
   else
     ./run.sh "$i" # for individual
   fi
@@ -50,22 +50,22 @@ done
 if [ "$use_set" = true ]; then
   res=$(ls results | grep -o "[0-9]*")
   for i in $res; do
-    set=$(find "results/$i/" | grep "results/[0-9]*/.*\.png")
+    set=$(find "results/$i/" | grep "results/[0-9]*/.*\.jpg")
     k=1
     for j in $set; do
-      mv "$j" "results/$i$k.png"
+      mv "$j" "results/$i$k.jpg"
       k=$((k + 1))
     done
     rmdir "results/$i"
   done
 fi
 
-cp assets/end_logo.png results/z_logo.png
-cp assets/end_logo.png results/zz_logo.png
+cp assets/end_logo.jpg results/z_logo.jpg
+cp assets/end_logo.jpg results/zz_logo.jpg
 afade_st=$((2 * (len - 1) - 1))
 image_count=$((len + 2))
 ./make_ffmpeg.sh "$image_count"
-rm results/z_logo.png results/zz_logo.png
+rm results/z_logo.jpg results/zz_logo.jpg
 
 ffmpeg -y -i "vid/no_audio.mov" -i input/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
 if [ $? -eq 1 ]; then

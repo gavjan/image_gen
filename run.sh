@@ -19,7 +19,7 @@ function ctrl_c() {
 	rm index.html 2> /dev/null
 	rm input.jpg 2> /dev/null
 	rm "$1" 2> /dev/null
-	rm result.png 2> /dev/null
+	rm result.jpg 2> /dev/null
 	rm brand.png 2> /dev/null
 	rm brand.svg 2> /dev/null
 }
@@ -78,12 +78,12 @@ if [ $# -eq 2 ]; then
   if [ ! -d results/$2 ]; then
     mkdir -p results/$2
   fi
-  mv result.png results/$2/set_res.png
+  mv result.jpg results/$2/set_res.jpg
 else
   if [ ! -d results ]; then
     mkdir results
   fi
-  mv result.png results/"$image_name_no_extension".png
+  mv result.jpg results/"$image_name_no_extension".jpg
 fi
 
 

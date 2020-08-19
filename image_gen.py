@@ -43,4 +43,4 @@ price_padding_x = price_offset_x + AMD_offset_x + 3 + 25
 ImageDraw.Draw(img).text((width - price_padding_x, height - 50), price, (255, 255, 255), price_font)
 ImageDraw.Draw(img).text((width - price_padding_x + price_offset_x + 3, height - 32), "AMD", (255, 255, 255), AMD_font)
 
-img.save('result.png')
+img.save('result.jpg')
