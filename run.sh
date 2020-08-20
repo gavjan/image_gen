@@ -42,7 +42,7 @@ off_tag="none"
 if grep -q "https://topsale.am/img/8c93320-2.png" <<< "$raw_product_data"
 then
     off_tag="20_off"
-elif grep -q "https://topsale.am/img/6f814sale.png" <<<  "$raw_product_data"
+elif grep -E -q "(https://topsale.am/img/6f814sale.png|https://topsale.am/img/f86236f814sale.png)" <<<  "$raw_product_data"
 then
     off_tag="50_20"
 fi
