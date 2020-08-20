@@ -46,7 +46,6 @@ elif grep -q "https://topsale.am/img/6f814sale.png" <<<  "$raw_product_data"
 then
     off_tag="50_20"
 fi
-printf "\noff_tag = %s\n" "$off_tag"
 
 printf "Starting %s" "$item_name"
 
