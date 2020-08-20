@@ -36,8 +36,19 @@ brand_png_link=$(grep -o -a -m 1 -h -r "<div class=\"product-brnd-logo\"><img sr
 brand_svg_link=$(grep -o -a -m 1 -h -r "<div class=\"product-brnd-logo\"><img src=\"https://topsale.am/img/brands/.*\.svg\"></div>" index.html | head -1 | grep -o "https://topsale.am/img/brands/.*\.svg")
 item_name=$(grep -o -a -m 1 -h -r "<meta property=\"og:title\" content=\"TopSale.am - [^\"/>]*" | grep -o "\"TopSale.am - [^\"]*")
 item_name="${item_name:14}"
+raw_product_data=$(xmllint --html --xpath '/html/body/div[@class="details-block"]' index.html 2>/dev/null)
 
-printf "Starting $item_name"
+off_tag="none"
+if grep -q "https://topsale.am/img/8c93320-2.png" <<< "$raw_product_data"
+then
+    off_tag="20_off"
+elif grep -q "https://topsale.am/img/6f814sale.png" <<<  "$raw_product_data"
+then
+    off_tag="50_20"
+fi
+printf "\noff_tag = %s\n" "$off_tag"
+
+printf "Starting %s" "$item_name"
 
 curl --silent "$image_link" --output input.jpg
 curl --silent "$brand_svg_link" --output brand.svg
@@ -69,7 +80,7 @@ else
   if [ "$split" = true ]; then
     python3 split.py $parsed_price
   else
-    python3 image_gen.py $parsed_price
+    python3 image_gen.py $parsed_price $off_tag
   fi
 fi
 
