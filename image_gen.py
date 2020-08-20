@@ -47,17 +47,14 @@ price_padding_x = price_offset_x + AMD_offset_x + 3 + 25
 ImageDraw.Draw(img).text((width - price_padding_x, height - 50), price, (255, 255, 255), price_font)
 ImageDraw.Draw(img).text((width - price_padding_x + price_offset_x + 3, height - 32), "AMD", (255, 255, 255), AMD_font)
 
-#if off_tag == "20_off":
+if off_tag == "20_off":
+    off_20 = read_image("assets/20_off.png").convert("RGBA")
+    off_20_size_x, off_20_size_y = off_20.size
+    img.paste(im=off_20, box=(width - 1 - off_20_size_x, 0), mask=off_20)
+elif off_tag == "50_20":
+    off_50 = read_image("assets/50_20.png").convert("RGBA")
+    off_50_size_x, off_50_size_y = off_50.size
+    img.paste(im=off_50, box=(width-1 - off_50_size_x - 2, 2), mask=off_50)
 
-
-
-#elif off_tag == "50_20":
-off_50 = read_image("assets/50_20.png").convert("RGBA")
-off_50_size_x, off_50_size_y = off_50.size
-img.paste(im=off_50, box=(width-1 - off_50_size_x - 2, 2), mask=off_50)
-
-off_20 = read_image("assets/20_off.png").convert("RGBA")
-off_20_size_x, off_20_size_y = off_20.size
-img.paste(im=off_20, box=(width-1 - off_20_size_x, 0), mask=off_20)
 
 img.save('result.jpg')
