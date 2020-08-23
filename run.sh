@@ -45,6 +45,9 @@ then
 elif grep -E -q "(https://topsale.am/img/6f814sale.png|https://topsale.am/img/f86236f814sale.png)" <<<  "$raw_product_data"
 then
     off_tag="50_20"
+elif grep -E -q "https://topsale.am/img/dba85fifty.png" <<<  "$raw_product_data"
+then
+    off_tag="50_off"
 fi
 
 printf "Starting %s" "$item_name"
@@ -77,9 +80,9 @@ elif [ ! -f brand.png ]; then
 else
   parsed_price="$price"
   if [ "$split" = true ]; then
-    python3 split.py $parsed_price
+    python3 split.py "$parsed_price"
   else
-    python3 image_gen.py $parsed_price $off_tag
+    python3 image_gen.py "$parsed_price" $off_tag
   fi
 fi
 

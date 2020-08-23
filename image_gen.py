@@ -52,9 +52,13 @@ if off_tag == "20_off":
     off_20_size_x, off_20_size_y = off_20.size
     img.paste(im=off_20, box=(width - 1 - off_20_size_x, 0), mask=off_20)
 elif off_tag == "50_20":
-    off_50 = read_image("assets/50_20.png").convert("RGBA")
+    off_50_20 = read_image("assets/50_20.png").convert("RGBA")
+    off_50_20_size_x, off_50_20_size_y = off_50_20.size
+    img.paste(im=off_50_20, box=(width-1 - off_50_20_size_x - 2, 2), mask=off_50_20)
+elif off_tag == "50_off":
+    off_50 = read_image("assets/50_off.png").convert("RGBA")
     off_50_size_x, off_50_size_y = off_50.size
-    img.paste(im=off_50, box=(width-1 - off_50_size_x - 2, 2), mask=off_50)
+    img.paste(im=off_50, box=(width - 1 - off_50_size_x - 2, 2), mask=off_50)
 
 
 img.save('result.jpg')
