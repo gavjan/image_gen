@@ -39,16 +39,16 @@ item_name="${item_name:14}"
 raw_product_data=$(xmllint --html --xpath '/html/body/div[@class="details-block"]' index.html 2>/dev/null)
 
 off_tag="none"
-if grep -q "https://topsale.am/img/8c93320-2.png" <<< "$raw_product_data"
-then
+if grep -q "https://topsale.am/img/8c93320-2.png" <<< "$raw_product_data"; then
     off_tag="20_off"
-elif grep -E -q "(https://topsale.am/img/6f814sale.png|https://topsale.am/img/f86236f814sale.png)" <<<  "$raw_product_data"
-then
+elif grep -E -q "(https://topsale.am/img/6f814sale.png|https://topsale.am/img/f86236f814sale.png)" <<<  "$raw_product_data"; then
     off_tag="50_20"
-elif grep -E -q "https://topsale.am/img/dba85fifty.png" <<<  "$raw_product_data"
-then
+elif grep -E -q "https://topsale.am/img/dba85fifty.png" <<<  "$raw_product_data"; then
     off_tag="50_off"
+elif grep -E -q "https://topsale.am/img/4ce3aschool.png" <<<  "$raw_product_data"; then
+    off_tag="school"
 fi
+
 
 printf "Starting %s" "$item_name"
 
