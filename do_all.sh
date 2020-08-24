@@ -5,7 +5,7 @@ set_len=2
 trap ctrl_c INT
 function ctrl_c() {
   rm -rf results/*
-  rm -f vid/no_audio.mov tmp.html
+  rm -f vid/no_audio.mov tmp.html 2> /dev/null
   exit 0
 }
 
@@ -15,7 +15,7 @@ if grep -q "Ընտրել" input/todo.html; then
   cat input/todo.html | grep "Ընտրել" > tmp.html
   num_of_items=$(cat tmp.html | wc -l)
   mv tmp.html input/todo.html
-  printf "Page detected; with %d products", "$num_of_items"
+  printf "Page detected; with %d products\n", "$num_of_items"
 fi
 
 
