@@ -59,7 +59,7 @@ if off_tag == "20_off" or off_tag == "50_20" or off_tag == "50_off" or off_tag =
         sticker_name = "assets/school.png"
     sticker = read_image(sticker_name).convert("RGBA")
     sticker_size_x, sticker_size_y = sticker.size
-    img.paste(im=sticker, box=(width - 1 - sticker - 2, 2), mask=sticker)
+    img.paste(im=sticker, box=(width - 1 - sticker_size_x - 2, 2), mask=sticker)
 
 
 img.save('result.jpg')
