@@ -22,7 +22,7 @@ fi
 
 arr=""
 if [ -f input/todo.html ]; then
-  arr=($(cat input/todo.html | grep -o "https://topsale.am/product/[a-zA-Z0-9+%;_&,\./\-]*"))
+  arr=($(cat input/todo.html | grep -o "https://topsale.am/product/[a-zA-Z0-9\+%;_&,\./\-]*"))
 else
   echo >&2 "input/todo.html is missing"
   exit 1

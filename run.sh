@@ -28,8 +28,8 @@ ctrl_c
 
 curl "$1" --silent --output index.html
 
-image_link=$(grep -o -a -m 1 -E -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.-]*.(jpg|png)" index.html | head -1)
-image_name=$(grep -o -a -m 1 -E -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.-]*.(jpg|png)" index.html | head -1 | grep -E -o "/[a-zA-Z0-9_.-]*.(jpg|png)" | grep -E -o "[a-zA-Z0-9_.-]*.(jpg|png)")
+image_link=$(grep -o -a -m 1 -E -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.+-]*.(jpg|png)" index.html | head -1)
+image_name=$(grep -o -a -m 1 -E -h -r "https://topsale.am/img/prodpic/[a-zA-Z0-9_.+-]*.(jpg|png)" index.html | head -1 | grep -E -o "/[a-zA-Z0-9_.+-]*.(jpg|png)" | grep -E -o "[a-zA-Z0-9_.+-]*.(jpg|png)")
 image_name_no_extension="${image_name::-4}"
 price=$(grep -m 1 -A 1 "<span class=\"regular\">" index.html | grep -o "[0-9,]*" )
 brand_png_link=$(grep -o -a -m 1 -h -r "<div class=\"product-brnd-logo\"><img src=\"https://topsale.am/img/brands/.*\.png\"></div>" index.html | head -1 | grep -o "https://topsale.am/img/brands/.*\.png")
