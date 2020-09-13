@@ -2,13 +2,13 @@ import sys
 from PIL import Image, ImageFont, ImageDraw, ImageOps
 
 if len(sys.argv) != 3:
-    print("[ERROR] passed argument error, correct usage:\n python3 image_gen.py <price> <off_tag>")
+    print("[ERROR] passed argument error, correct usage:\n python3 image_gen.py <price> <off_tags>")
     exit(1)
 
 passed_price = sys.argv[1]
 price = passed_price
-off_tag = sys.argv[2]
-print(" " + price, "[" + off_tag + "]")
+off_tags = sys.argv[2]
+print(" " + price, "[" + off_tags + "]")
 
 
 def read_image(path):
@@ -47,15 +47,15 @@ price_padding_x = price_offset_x + AMD_offset_x + 3 + 25
 ImageDraw.Draw(img).text((width - price_padding_x, height - 50), price, (255, 255, 255), price_font)
 ImageDraw.Draw(img).text((width - price_padding_x + price_offset_x + 3, height - 32), "AMD", (255, 255, 255), AMD_font)
 
-if off_tag == "20_off" or off_tag == "50_20" or off_tag == "50_off" or off_tag == "school":
+if off_tags == "20_off" or off_tags == "50_20" or off_tags == "50_off" or off_tags == "school":
     sticker_name = ""
-    if off_tag == "20_off":
+    if off_tags == "20_off":
         sticker_name = "assets/20_off.png"
-    elif off_tag == "50_20":
+    elif off_tags == "50_20":
         sticker_name = "assets/50_20.png"
-    elif off_tag == "50_off":
+    elif off_tags == "50_off":
         sticker_name = "assets/50_off.png"
-    elif off_tag == "school":
+    elif off_tags == "school":
         sticker_name = "assets/school.png"
     sticker = read_image(sticker_name).convert("RGBA")
     sticker_size_x, sticker_size_y = sticker.size
