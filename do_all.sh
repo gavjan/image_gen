@@ -4,12 +4,11 @@ set_len=2
 #---------------------------------
 trap ctrl_c INT
 function ctrl_c() {
-  rm -rf results/*
   rm -f vid/no_audio.mov tmp.html 2> /dev/null
   exit 0
 }
 
-rm -rf results/*
+rm -rf results/* 2> /dev/null
 
 if grep -q "Ընտրել" input/todo.html; then
   cat input/todo.html | grep "Ընտրել" > tmp.html
