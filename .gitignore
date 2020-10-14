@@ -129,6 +129,7 @@ dmypy.json
 .idea/*
 do_all*
 results/*
+categories/*
 *.jpg
 *.png
 *.svg
