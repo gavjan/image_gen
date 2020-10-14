@@ -50,8 +50,6 @@ elif grep -E -q "https://topsale.am/img/4ce3aschool.png" <<<  "$raw_product_data
 fi
 
 
-printf "Starting %s" "$item_name"
-
 curl --silent "$image_link" --output input.jpg
 curl --silent "$brand_svg_link" --output brand.svg
 curl --silent "$brand_png_link" --output brand.png

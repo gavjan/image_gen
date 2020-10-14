@@ -8,7 +8,6 @@ if len(sys.argv) != 3:
 passed_price = sys.argv[1]
 price = passed_price
 off_tags = sys.argv[2]
-print(" " + price, "[" + off_tags + "]")
 
 
 def read_image(path):
@@ -28,8 +27,6 @@ brand = read_image("brand.png").convert("RGBA")
 width, height = img.size
 pixels = img.load()
 back_color = pixels[width - 1, 0]
-
-print("PASS")
 
 img.paste(im=foreground, box=(0, 0), mask=foreground)
 

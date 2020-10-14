@@ -7,20 +7,39 @@ function ctrl_c() {
   rm -f vid/no_audio.mov tmp.html 2> /dev/null
   exit 0
 }
+function ProgressBar {
+    let _progress=(${1}*100/${2}*100)/100
+    let _done=(${_progress}*4)/10
+    let _left=40-$_done
+    _fill=$(printf "%${_done}s")
+    _empty=$(printf "%${_left}s")
+printf "\r : [${_fill// /#}${_empty// /-}] ${_progress}%%"
+printf " [%d/%d]" ${1} ${2}
+}
+novid=false
+if [ $# == 1 ] && [ "$1" == "--novid" ]; then
+    novid=true
+fi
 
+name=$1
 rm -rf results/* 2> /dev/null
 
 if grep -q "Ընտրել" input/todo.html; then
   cat input/todo.html | grep "Ընտրել" > tmp.html
   num_of_items=$(cat tmp.html | wc -l)
   mv tmp.html input/todo.html
-  printf "Page detected; with %d products\n", "$num_of_items"
+  echo " --Page detected--"
 fi
 
 
 
 arr=""
 if [ -f input/todo.html ]; then
+  if grep -q "https://topsale.am/category" input/todo.html; then
+    printf " --Categories detected--"
+    ./categories.sh && exit 0
+    exit 1
+  fi
   arr=($(cat input/todo.html | grep -o "https://topsale.am/product/[a-zA-Z0-9\+%;_&,\./\-]*"))
 else
   echo >&2 "input/todo.html is missing"
@@ -35,8 +54,7 @@ ctr=1
 set=1
 
 for i in "${arr[@]}"; do
-  echo "$i"
-  printf "[%d/%d] " $ctr $len
+  ProgressBar ${ctr} ${len}
   if [ "$use_set" = true ]; then
     ./run.sh $i $set # for sets
     num=$(((ctr % set_len)))
@@ -52,7 +70,6 @@ for i in "${arr[@]}"; do
     set=$((set + 1))
   fi
   ctr=$((ctr + 1))
-  echo
 done
 
 if [ "$use_set" = true ]; then
@@ -67,18 +84,19 @@ if [ "$use_set" = true ]; then
     rmdir "results/$i"
   done
 fi
+if [ "$novid" = false ]; then
+  cp assets/end_logo.jpg results/z_logo.jpg
+  cp assets/end_logo.jpg results/zz_logo.jpg
+  afade_st=$((2 * (len - 1) - 1))
+  image_count=$((len + 2))
+  ./make_ffmpeg.sh "$image_count"
+  rm results/z_logo.jpg results/zz_logo.jpg
 
-cp assets/end_logo.jpg results/z_logo.jpg
-cp assets/end_logo.jpg results/zz_logo.jpg
-afade_st=$((2 * (len - 1) - 1))
-image_count=$((len + 2))
-./make_ffmpeg.sh "$image_count"
-rm results/z_logo.jpg results/zz_logo.jpg
-
-ffmpeg -y -i "vid/no_audio.mov" -i input/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
-if [ $? -eq 1 ]; then
-  printf "\n--\n"
-  read -p "Video Failed. Press enter to continue"
+  ffmpeg -y -i "vid/no_audio.mov" -i input/music.mp3 -vol 160 -af "afade=in:st=0:d=3,afade=out:st=$afade_st:d=6" -shortest -r 30 vid/output.mov
+  if [ $? -eq 1 ]; then
+    printf "\n--\n"
+    read -p "Video Failed. Press enter to continue"
+  fi
+  mpv vid/output.mov
 fi
-mpv vid/output.mov
 ctrl_c
