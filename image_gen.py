@@ -44,16 +44,18 @@ price_padding_x = price_offset_x + AMD_offset_x + 3 + 25
 ImageDraw.Draw(img).text((width - price_padding_x, height - 50), price, (255, 255, 255), price_font)
 ImageDraw.Draw(img).text((width - price_padding_x + price_offset_x + 3, height - 32), "AMD", (255, 255, 255), AMD_font)
 
-if off_tags == "20_off" or off_tags == "50_20" or off_tags == "50_off" or off_tags == "school":
-    sticker_name = ""
-    if off_tags == "20_off":
-        sticker_name = "assets/20_off.png"
-    elif off_tags == "50_20":
-        sticker_name = "assets/50_20.png"
-    elif off_tags == "50_off":
-        sticker_name = "assets/50_off.png"
-    elif off_tags == "school":
-        sticker_name = "assets/school.png"
+
+tag_map = {
+    "20_off": "assets/20_off.png",
+    "50_20": "assets/50_20.png",
+    "50_off": "assets/50_off.png",
+    "school": "assets/school.png",
+    "b_friday": "assets/b_friday.png"
+}
+sticker_name = ""
+if off_tags in tag_map:
+    sticker_name = tag_map[off_tags]
+    
     sticker = read_image(sticker_name).convert("RGBA")
     sticker_size_x, sticker_size_y = sticker.size
     img.paste(im=sticker, box=(width - 1 - sticker_size_x - 2, 2), mask=sticker)
