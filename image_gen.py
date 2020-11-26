@@ -53,8 +53,11 @@ tag_map = {
     "b_friday": "assets/b_friday.png"
 }
 sticker_name = ""
+print(off_tags)
 if off_tags in tag_map:
     sticker_name = tag_map[off_tags]
+    if off_tags == "b_friday":
+        print("BOZZZZZZ")
     
     sticker = read_image(sticker_name).convert("RGBA")
     sticker_size_x, sticker_size_y = sticker.size

@@ -38,8 +38,11 @@ item_name=$(grep -o -a -m 1 -h -r "<meta property=\"og:title\" content=\"TopSale
 item_name="${item_name:14}"
 raw_product_data=$(xmllint --html --xpath '/html/body/div[@class="details-block"]' index.html 2>/dev/null)
 
+# TODO:  This was for black friday, it uses the whole thing to search, DELETE this garbage after black friday
+raw_product_data=$(cat index.html)
 off_tags="none"
-if grep -E -q "https://topsale.am/img/075aaBlackFridaySale.png" <<<  "$raw_product_data"; then
+echo "$raw_product_data" > tmp.txt
+if grep -q "https://topsale.am/img/075aaBlackFridaySale.png" <<<  "$raw_product_data"; then
     off_tags="b_friday"
 elif grep -E -q "(https://topsale.am/img/6f814sale.png|https://topsale.am/img/f86236f814sale.png)" <<<  "$raw_product_data"; then
     off_tags="50_20"
