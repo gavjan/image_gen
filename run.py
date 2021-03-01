@@ -5,8 +5,10 @@ from urllib.error import HTTPError
 import re
 import os
 from image_gen import gen_image
-from cairosvg import svg2png
 from async_get import async_get
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPM
+import glob
 
 
 def assert_folder(name):
@@ -82,13 +84,21 @@ def download_tags(tag_links):
 
 
 def svg_to_png(name):
-    f = open(name, "r")
-    svg2png(bytestring=f.read(), write_to=f"{name[:-4]}.png")
-    f.close()
+    drawing = svg2rlg(name)
+    renderPM.drawToFile(drawing, f"{name[:-4]}.png", fmt="PNG")
+
+
+def rm_rf(name):
+    for f in glob.glob(f"{name}/*"):
+        if os.path.isdir(f):
+            rm_rf(f)
+            os.rmdir(f)
+        else:
+            os.remove(f)
 
 
 def do_prod(job):
-    link, html, save_path = job['url'], job['data'], job['save_path']
+    link, html, save_path, todo = job['url'], job['data'], job['save_path'], job['todo']
     print(link)
     page_soup = soup(html, "html.parser")
     prod_html = page_soup.find("div", {"class": "details-block"})
@@ -125,34 +135,130 @@ def do_prod(job):
     # Get image file name
     del_len = len("topsale.am/img/prodpic/")
     img_name = re.search(r"topsale\.am/img/prodpic/.*", img_link).group()[del_len:]
-    download_image(img_link, f"input/{img_name}")
 
-    gen_image(f"input/{img_name}", f"{save_path}/{img_name}", price, brand, off_tags)
+    todo.append({
+        "url": img_link,
+        "img_name": img_name,
+        "save_path": save_path,
+        "price": price,
+        "brand": brand,
+        "off_tags": off_tags.copy()
+    })
 
 
-def do_individual(links):
+def print_json(_json, intend="", comma=False, left_bracket=True):
+    if isinstance(_json, list):
+        if left_bracket:
+            print(intend + "[")
+
+        for i in range(len(_json)):
+            print_json(_json[i], intend + "\t", comma=(i < len(_json) - 1))
+        print(intend + "]")
+        return
+
+    def colored(color, text):
+        return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(color[0], color[1], color[2], text)
+
+    green = [0, 255, 0]
+    cyan = [0, 255, 255]
+    if left_bracket:
+        print(intend + "{")
+    i = 0
+    for key in _json:
+        val = _json[key]
+        if isinstance(_json[key], dict):
+            print(f"{intend}\t{colored(green, key)}: {'{'}")
+            print_json(_json[key], intend + "\t", left_bracket=False, comma=(i < len(_json) - 1))
+        elif isinstance(_json[key], list):
+            print(f"{intend}\t{colored(green, key)}: {'['}")
+            print_json(_json[key], intend + "\t", left_bracket=False, comma=(i < len(_json) - 1))
+        else:
+            if isinstance(_json[key], str):
+                val = f"\"{val}\"".replace("\n", "\\n")
+            val_comma = "," if i < len(_json) - 1 else ""
+            print(f"{intend}\t{colored(green, key)}: {colored(cyan, val)}{val_comma}")
+        i += 1
+    print(intend + "}" + ("," if comma else ""))
+
+
+def do_links(links, save_path):
     jobs = []
-    assert_folder("results")
+    todo = []
     for link in links:
         jobs.append({
             'url': link,
-            'save_path': "results"
+            'save_path': save_path,
+            'todo': todo
         })
     async_get(jobs, do_prod)
 
+    def download_and_edit(job):
+        print(job["url"])
+        img_name = job["img_name"]
+        _save_path = job["save_path"]
+        price = job["price"]
+        brand = job["brand"]
+        off_tags = job["off_tags"]
+
+        gen_image(f"input/{img_name}", f"{_save_path}/{img_name}", price, brand, off_tags)
+
+    async_get(todo, download_and_edit)
+
+
+def get_all_cats():
+    home = load_page("https://topsale.am/")
+
+    categories = home.find("div", {"class": "categorylist"}).ul
+    categories = categories.find_all("li", {"class": ["swiper-slide", "item menu-element"]})[:-1]
+
+    all_cats = {}
+
+    # TODO: Delete me
+    categories = categories[:1]
+
+    for cat in categories:
+        main_cat_name = cat.a.decode_contents().strip()
+        all_cats[main_cat_name] = []
+        sub_cats = cat.div.ul.find_all("li", {})
+
+        # TODO: Delete me
+        sub_cats = sub_cats[:1]
+        for sub_cat in sub_cats:
+            all_cats[main_cat_name].append({
+                "sub_category": sub_cat.a.decode_contents().strip(),
+                "link": sub_cat.a["href"]
+            })
+
+    return all_cats
+
+
+def do_sub_category(category, sub_cat):
+    sub_cat_name, link = sub_cat["sub_category"], sub_cat["link"]
+
+    page = load_page(link)
+    page = page.find("div", {"class": "row"})
+    list_items = page.find_all("div", {"class": "listitem"})
+
+    prod_links = []
+    for list_item in list_items:
+        prod_link = list_item.find("a", {"class": "prod-item-img"})['href']
+        prod_link = re.sub(r"[\n\r]", "", prod_link)
+        prod_links.append(prod_link)
+
+    do_links(prod_links, f"results/{category}/{sub_cat['sub_category']}")
+
 
 def start():
-    links = [
-        "https://topsale.am/product/adidas-originals-top-ten-rb-sneaker/16365/",
-        "https://topsale.am/product/adidas-originals-top-ten-rb-sneaker/16365/",
-        "https://topsale.am/product/adidas-originals-top-ten-rb-sneaker/16365/",
-        "https://topsale.am/product/jack-and-jones-jorbendt-padded-jacket/16360/",
-        "https://topsale.am/product/jack-and-jones-jorbendt-padded-jacket/16360/",
-        "https://topsale.am/product/jack-and-jones-jorbendt-padded-jacket/16360/",
-        "https://topsale.am/product/puma-rebound-playoff-sl-sneakers/16324/",
-        "https://topsale.am/product/puma-rebound-playoff-sl-sneakers/16324/"
-    ]
-    do_individual(links)
+    assert_folder("results")
+    rm_rf("results")
+    rm_rf("input")
+
+    all_cats = get_all_cats()
+    for cat in all_cats:
+        os.makedirs(f"results/{cat}")
+        for sub_cat in all_cats[cat]:
+            os.makedirs(f"results/{cat}/{sub_cat['sub_category']}")
+            do_sub_category(cat, sub_cat)
 
 
 if __name__ == '__main__':
