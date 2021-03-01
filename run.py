@@ -6,6 +6,8 @@ import re
 import os
 from image_gen import gen_image
 from async_get import async_get
+from async_get import download_image
+
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
 import glob
@@ -18,29 +20,6 @@ def assert_folder(name):
 
 def file_exists(filename):
     return os.path.exists(filename)
-
-
-def download_image(url, file_name, attempt=1):
-    def is_ascii(s):
-        return all(ord(c) < 128 for c in s)
-
-    if not is_ascii(url):
-        for x in url:
-            if not is_ascii(x):
-                url = url.replace(x, quote(x))
-
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    try:
-        web_byte = urlopen(req).read()
-        f = open(file_name, "wb")
-        f.write(web_byte)
-        f.close()
-        return True
-    except HTTPError as err:
-        if err.code == 503 and attempt < 5:
-            return download_image(url, file_name, attempt + 1)
-        else:
-            return False
 
 
 def load_page(url, attempt=1):
@@ -259,6 +238,8 @@ def start():
         for sub_cat in all_cats[cat]:
             os.makedirs(f"results/{cat}/{sub_cat['sub_category']}")
             do_sub_category(cat, sub_cat)
+
+    rm_rf("input")
 
 
 if __name__ == '__main__':
