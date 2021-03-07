@@ -225,6 +225,7 @@ def do_sub_category(category, sub_cat):
 
 
 def init():
+    assert_folder("input")
     assert_folder("results")
     rm_rf("results")
     rm_rf("input")
@@ -252,13 +253,13 @@ def init_gui(all_cats):
                 picks = []
             label = Label(parent, text=label)
             label.pack(side=side, anchor=anchor, expand=YES)
-            label.config(font=("Arial", 18))
+            label.config(font=("Arial", 12))
 
             self.vars = []
             for pick in picks:
                 var = IntVar()
                 chk = Checkbutton(self, text=pick, variable=var)
-                chk.config(font=("Arial", 12))
+                chk.config(font=("Arial", 6))
                 chk.pack(side=side, anchor=anchor, expand=YES)
                 self.vars.append(var)
             Frame.pack(self, side=side, fill=X)
