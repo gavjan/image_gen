@@ -1,7 +1,10 @@
+import asyncio
 from tkinter import *
 import glob
 import re
 import os
+from tkinter.ttk import Progressbar
+
 from bs4 import BeautifulSoup as soup  # HTML data structure
 from urllib.request import Request, urlopen
 from urllib.parse import quote
@@ -11,6 +14,10 @@ from async_get import async_get
 from async_get import download_image
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
+import nest_asyncio
+import webbrowser
+
+nest_asyncio.apply()
 
 
 def assert_folder(name):
@@ -238,31 +245,65 @@ def clean():
 
 
 def init_gui(all_cats):
-    def to_sub_cat_array(category):
-        cat = category.copy()
+    def to_sub_cat_array(_category):
+        cat = _category.copy()
         sub_cats = []
         for sub_cat in cat:
             sub_cats.append(sub_cat["sub_category"])
 
         return sub_cats
 
+    def start_scraping():
+        progress = Progressbar(canvas, orient=HORIZONTAL, length=100, mode='determinate')
+        progress.grid(row=max_row + 1, column=0)
+        root.update_idletasks()
+
+        k = 0
+        new_cats = {}
+        for cat in all_cats:
+            j = 0
+            new_cats[cat] = []
+            states = list(cat_boxes[k].state())
+            for sub_cat in all_cats[cat]:
+                if states[j]:
+                    new_cats[cat].append(sub_cat.copy())
+                j += 1
+
+            k += 1
+            if not new_cats[cat]:
+                del new_cats[cat]
+
+        overall = sum([len(new_cats[cat]) for cat in new_cats])
+        step = 100 / overall
+        i = 0
+        for cat in new_cats:
+            for sub_cat in new_cats[cat]:
+                do_sub_category(cat, sub_cat)
+                i += step
+                progress["value"] = i
+                root.update_idletasks()
+
+        root.quit()
+
     class Checkbar(Frame):
-        def __init__(self, parent=None, picks=None, side=TOP, anchor=W, label=""):
+        def __init__(self, col, parent=None, picks=None, label=""):
             Frame.__init__(self, parent)
             if picks is None:
                 picks = []
-            label = Label(parent, text=label)
-            label.pack(side=side, anchor=anchor, expand=YES)
-            label.config(font=("Arial", 12))
+            label = Label(parent, text=label, justify=LEFT)
+            label.grid(row=0, column=col, ipady=5)
+            label.config(font=("Arial", 16))
 
             self.vars = []
+            i = 1
             for pick in picks:
                 var = IntVar()
                 chk = Checkbutton(self, text=pick, variable=var)
-                chk.config(font=("Arial", 6))
-                chk.pack(side=side, anchor=anchor, expand=YES)
+                chk.config(font=("Arial", 12))
+                chk.grid(row=i - 1, column=0, sticky=NW, ipadx=10)
                 self.vars.append(var)
-            Frame.pack(self, side=side, fill=X)
+                i += 1
+            Frame.grid(self, row=1, column=col, sticky=NW)
             Frame.config(self, bd=2)
 
         def state(self):
@@ -273,33 +314,17 @@ def init_gui(all_cats):
     canvas.pack()
 
     cat_boxes = []
+    _i = 0
     for category in all_cats:
-        cat_boxes.append(Checkbar(parent=canvas, label=category, picks=to_sub_cat_array(all_cats[category])))
+        cat_boxes.append(Checkbar(parent=canvas, label=category, picks=to_sub_cat_array(all_cats[category]), col=_i))
+        _i += 1
 
-    def start_scraping():
-        i = 0
-        new_cats = {}
-        for cat in all_cats:
-            j = 0
-            new_cats[cat] = []
-            states = list(cat_boxes[i].state())
-            for sub_cat in all_cats[cat]:
-                if states[j]:
-                    new_cats[cat].append(sub_cat.copy())
-                j += 1
+    max_row = max([len(all_cats[cat]) for cat in all_cats])
 
-            i += 1
-            if not new_cats[cat]:
-                del new_cats[cat]
-        canvas.destroy()
-        for cat in new_cats:
-            for sub_cat in new_cats[cat]:
-                do_sub_category(cat, sub_cat)
-        root.quit()
-
-    Button(canvas, text='Start', command=start_scraping).pack(side=RIGHT)
+    Button(canvas, text='Start', command=start_scraping).grid(row=max_row, column=1)
 
     def quit_all():
+        clean()
         root.destroy()
         exit(0)
 
