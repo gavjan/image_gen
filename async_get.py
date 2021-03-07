@@ -1,13 +1,10 @@
 import requests
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from timeit import default_timer
 import re
 from urllib.request import Request, urlopen
 from urllib.parse import quote
 from urllib.error import HTTPError
-
-START_TIME = default_timer()
 
 
 def download_image(url, file_name, attempt=1):

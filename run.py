@@ -1,16 +1,16 @@
+from tkinter import *
+import glob
+import re
+import os
 from bs4 import BeautifulSoup as soup  # HTML data structure
 from urllib.request import Request, urlopen
 from urllib.parse import quote
 from urllib.error import HTTPError
-import re
-import os
 from image_gen import gen_image
 from async_get import async_get
 from async_get import download_image
-
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
-import glob
 
 
 def assert_folder(name):
@@ -192,16 +192,11 @@ def get_all_cats():
 
     all_cats = {}
 
-    # TODO: Delete me
-    categories = categories[:1]
-
     for cat in categories:
         main_cat_name = cat.a.decode_contents().strip()
         all_cats[main_cat_name] = []
         sub_cats = cat.div.ul.find_all("li", {})
 
-        # TODO: Delete me
-        sub_cats = sub_cats[:1]
         for sub_cat in sub_cats:
             all_cats[main_cat_name].append({
                 "sub_category": sub_cat.a.decode_contents().strip(),
@@ -212,6 +207,8 @@ def get_all_cats():
 
 
 def do_sub_category(category, sub_cat):
+    assert_folder(f"results/{category}")
+    assert_folder(f"results/{category}/{sub_cat['sub_category']}")
     sub_cat_name, link = sub_cat["sub_category"], sub_cat["link"]
 
     page = load_page(link)
@@ -227,20 +224,94 @@ def do_sub_category(category, sub_cat):
     do_links(prod_links, f"results/{category}/{sub_cat['sub_category']}")
 
 
-def start():
+def init():
     assert_folder("results")
     rm_rf("results")
     rm_rf("input")
 
-    all_cats = get_all_cats()
-    for cat in all_cats:
-        os.makedirs(f"results/{cat}")
-        for sub_cat in all_cats[cat]:
-            os.makedirs(f"results/{cat}/{sub_cat['sub_category']}")
-            do_sub_category(cat, sub_cat)
+    return get_all_cats()
 
+
+def clean():
     rm_rf("input")
+
+
+def init_gui(all_cats):
+    def to_sub_cat_array(category):
+        cat = category.copy()
+        sub_cats = []
+        for sub_cat in cat:
+            sub_cats.append(sub_cat["sub_category"])
+
+        return sub_cats
+
+    class Checkbar(Frame):
+        def __init__(self, parent=None, picks=None, side=TOP, anchor=W, label=""):
+            Frame.__init__(self, parent)
+            if picks is None:
+                picks = []
+            label = Label(parent, text=label)
+            label.pack(side=side, anchor=anchor, expand=YES)
+            label.config(font=("Arial", 18))
+
+            self.vars = []
+            for pick in picks:
+                var = IntVar()
+                chk = Checkbutton(self, text=pick, variable=var)
+                chk.config(font=("Arial", 12))
+                chk.pack(side=side, anchor=anchor, expand=YES)
+                self.vars.append(var)
+            Frame.pack(self, side=side, fill=X)
+            Frame.config(self, bd=2)
+
+        def state(self):
+            return map((lambda var: var.get()), self.vars)
+
+    root = Tk()
+    canvas = Canvas(root)
+    canvas.pack()
+
+    cat_boxes = []
+    for category in all_cats:
+        cat_boxes.append(Checkbar(parent=canvas, label=category, picks=to_sub_cat_array(all_cats[category])))
+
+    def start_scraping():
+        i = 0
+        new_cats = {}
+        for cat in all_cats:
+            j = 0
+            new_cats[cat] = []
+            states = list(cat_boxes[i].state())
+            for sub_cat in all_cats[cat]:
+                if states[j]:
+                    new_cats[cat].append(sub_cat.copy())
+                j += 1
+
+            i += 1
+            if not new_cats[cat]:
+                del new_cats[cat]
+        canvas.destroy()
+        for cat in new_cats:
+            for sub_cat in new_cats[cat]:
+                do_sub_category(cat, sub_cat)
+        root.quit()
+
+    Button(canvas, text='Start', command=start_scraping).pack(side=RIGHT)
+
+    def quit_all():
+        root.destroy()
+        exit(0)
+
+    root.protocol('WM_DELETE_WINDOW', quit_all)  # root is your root window
+    root.mainloop()
+
+
+def start():
+    all_cats = init()
+
+    init_gui(all_cats)
 
 
 if __name__ == '__main__':
     start()
+    clean()
