@@ -14,10 +14,6 @@ from async_get import async_get
 from async_get import download_image
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
-import nest_asyncio
-import webbrowser
-
-nest_asyncio.apply()
 
 
 def assert_folder(name):
