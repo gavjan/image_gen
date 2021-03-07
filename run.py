@@ -250,9 +250,6 @@ def init_gui(all_cats):
         return sub_cats
 
     def start_scraping():
-        progress = Progressbar(canvas, orient=HORIZONTAL, length=100, mode='determinate')
-        progress.grid(row=max_row + 1, column=0)
-        root.update_idletasks()
 
         k = 0
         new_cats = {}
@@ -270,6 +267,12 @@ def init_gui(all_cats):
                 del new_cats[cat]
 
         overall = sum([len(new_cats[cat]) for cat in new_cats])
+        if overall == 0:
+            return
+
+        progress = Progressbar(canvas, orient=HORIZONTAL, length=300, mode='determinate')
+        progress.grid(row=max_row + 1, column=0, ipadx=10)
+        root.update_idletasks()
         step = 100 / overall
         i = 0
         for cat in new_cats:
