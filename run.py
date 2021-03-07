@@ -270,8 +270,8 @@ def init_gui(all_cats):
         if overall == 0:
             return
 
-        progress = Progressbar(canvas, orient=HORIZONTAL, length=300, mode='determinate')
-        progress.grid(row=max_row + 1, column=0, ipadx=10)
+        progress = Progressbar(canvas, orient=HORIZONTAL, length=200, mode='determinate')
+        progress.grid(row=max_row, column=1, pady=10)
         root.update_idletasks()
         step = 100 / overall
         i = 0
@@ -320,7 +320,8 @@ def init_gui(all_cats):
 
     max_row = max([len(all_cats[cat]) for cat in all_cats])
 
-    Button(canvas, text='Start', command=start_scraping).grid(row=max_row, column=1)
+    btn = Button(canvas, text='Start', command=start_scraping, height=2, width=27)
+    btn.grid(row=max_row, column=0, padx=10, pady=10)
 
     def quit_all():
         clean()
