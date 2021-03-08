@@ -1,4 +1,3 @@
-import asyncio
 from tkinter import *
 import glob
 import re
@@ -67,7 +66,11 @@ def download_tags(tag_links):
 
 def svg_to_png(name):
     drawing = svg2rlg(name)
-    renderPM.drawToFile(drawing, f"{name[:-4]}.png", fmt="PNG")
+    try:
+        renderPM.drawToFile(drawing, f"{name[:-4]}.png", fmt="PNG")
+        return True
+    except Exception:
+        return False
 
 
 def rm_rf(name):
@@ -103,8 +106,12 @@ def do_prod(job):
     load_to_cache(brand_link, brand)
     if brand[-4:] == ".svg":
         if not file_exists(f".cache/{brand[:-4]}.png"):
-            svg_to_png(f".cache/{brand}")
-        brand = f"{brand[:-4]}.png"
+            if svg_to_png(f".cache/{brand}"):
+                brand = f"{brand[:-4]}.png"
+            else:
+                brand = ""
+        else:
+            brand = f"{brand[:-4]}.png"
 
     # off_tags
     tag_links = []

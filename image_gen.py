@@ -11,24 +11,29 @@ def read_image(path):
 
 
 def gen_image(input_img, output_img, price, brand, off_tags):
-    brand = f".cache/{brand}"
     price_font = ImageFont.truetype("assets/montserrat-bold.ttf", 36)
     AMD_font = ImageFont.truetype("assets/montserrat-bold.ttf", 18)
 
     img = read_image(input_img)
     foreground = read_image("assets/foreground.png")
-    brand = read_image(brand).convert("RGBA")
+
+    brand_exists = brand != ""
+    brand = f".cache/{brand}"
+    if brand_exists:
+        brand = read_image(brand).convert("RGBA")
     width, height = img.size
 
     img.paste(im=foreground, box=(0, 0), mask=foreground)
 
-    brand_x, brand_y = brand.size
+    brand_x, brand_y = brand.size if brand_exists else (0, 0)
     white_back_x = 298
     white_back_y = 48
     size = white_back_x, white_back_y
-    brand.thumbnail(size, Image.ANTIALIAS)
+    if brand_exists:
+        brand.thumbnail(size, Image.ANTIALIAS)
     brand_padding_x = int((white_back_x - brand_x) / 2)
-    img.paste(im=brand, box=(brand_padding_x, height - white_back_y - 2), mask=brand)
+    if brand_exists:
+        img.paste(im=brand, box=(brand_padding_x, height - white_back_y - 2), mask=brand)
 
     price_offset_x, price_offset_y = ImageDraw.Draw(img).textsize(price, price_font)
     AMD_offset_x, AMD_offset_y = ImageDraw.Draw(img).textsize("AMD", AMD_font)
