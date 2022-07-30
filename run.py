@@ -3,7 +3,7 @@ import glob
 import re
 import os
 from tkinter.ttk import Progressbar
-
+from tkinter import messagebox
 from bs4 import BeautifulSoup as soup  # HTML data structure
 from urllib.request import Request, urlopen
 from urllib.parse import quote
@@ -11,6 +11,7 @@ from urllib.error import HTTPError
 from image_gen import gen_image
 from async_get import async_get
 from async_get import download_image
+from async_get import is_ascii
 from svglib.svglib import svg2rlg
 from reportlab.graphics import renderPM
 
@@ -25,9 +26,6 @@ def file_exists(filename):
 
 
 def load_page(url, attempt=1):
-    def is_ascii(s):
-        return all(ord(c) < 128 for c in s)
-
     if not is_ascii(url):
         for x in url:
             if not is_ascii(x):
@@ -103,7 +101,11 @@ def do_prod(job):
     brand_link = prod_html.find("div", {"class": "product-brnd-logo"}).img["src"]
     del_len = len("topsale.am/img/brands/")
     brand = re.search(r"topsale\.am/img/brands/.*", brand_link).group()[del_len:]
-    load_to_cache(brand_link, brand)
+
+    if brand == "0":
+        brand = ""
+    else:
+        load_to_cache(brand_link, brand)
     if brand[-4:] == ".svg":
         if not file_exists(f".cache/{brand[:-4]}.png"):
             if svg_to_png(f".cache/{brand}"):
@@ -133,41 +135,6 @@ def do_prod(job):
         "brand": brand,
         "off_tags": off_tags.copy()
     })
-
-
-def print_json(_json, intend="", comma=False, left_bracket=True):
-    if isinstance(_json, list):
-        if left_bracket:
-            print(intend + "[")
-
-        for i in range(len(_json)):
-            print_json(_json[i], intend + "\t", comma=(i < len(_json) - 1))
-        print(intend + "]")
-        return
-
-    def colored(color, text):
-        return "\033[38;2;{};{};{}m{}\033[38;2;255;255;255m".format(color[0], color[1], color[2], text)
-
-    green = [0, 255, 0]
-    cyan = [0, 255, 255]
-    if left_bracket:
-        print(intend + "{")
-    i = 0
-    for key in _json:
-        val = _json[key]
-        if isinstance(_json[key], dict):
-            print(f"{intend}\t{colored(green, key)}: {'{'}")
-            print_json(_json[key], intend + "\t", left_bracket=False, comma=(i < len(_json) - 1))
-        elif isinstance(_json[key], list):
-            print(f"{intend}\t{colored(green, key)}: {'['}")
-            print_json(_json[key], intend + "\t", left_bracket=False, comma=(i < len(_json) - 1))
-        else:
-            if isinstance(_json[key], str):
-                val = f"\"{val}\"".replace("\n", "\\n")
-            val_comma = "," if i < len(_json) - 1 else ""
-            print(f"{intend}\t{colored(green, key)}: {colored(cyan, val)}{val_comma}")
-        i += 1
-    print(intend + "}" + ("," if comma else ""))
 
 
 def do_links(links, save_path):
@@ -284,7 +251,12 @@ def init_gui(all_cats):
         i = 0
         for cat in new_cats:
             for sub_cat in new_cats[cat]:
-                do_sub_category(cat, sub_cat)
+                try:
+                    do_sub_category(cat, sub_cat)
+                except Exception as e:
+                    messagebox.showerror("Error", str(e))
+                    root.quit()
+
                 i += step
                 progress["value"] = i
                 root.update_idletasks()

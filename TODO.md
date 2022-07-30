@@ -1,3 +1,3 @@
-- [ ] GUI
+- [X] GUI
 - [ ] Only prods with tags
 - [ ] ffmpeg video
