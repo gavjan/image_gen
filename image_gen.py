@@ -45,6 +45,8 @@ def gen_image(input_img, output_img, price, brand, off_tags):
     for tag in off_tags:
         tag = f".cache/{tag}"
         sticker = read_image(tag).convert("RGBA")
+        sticker = sticker.resize((100, 100))
+
         sticker_size_x, sticker_size_y = sticker.size
         img.paste(im=sticker, box=(width - 1 - sticker_size_x - 2, 2), mask=sticker)
 
