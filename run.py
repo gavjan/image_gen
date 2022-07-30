@@ -212,6 +212,7 @@ def init():
 
 def clean():
     rm_rf("input")
+    os.rmdir("input")
 
 
 def init_gui(all_cats):
