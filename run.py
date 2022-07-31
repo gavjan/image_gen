@@ -156,7 +156,7 @@ def do_links(links, save_path):
         brand = job["brand"]
         off_tags = job["off_tags"]
 
-        gen_image(f"input/{img_name}", f"{_save_path}/{img_name}", price, brand, off_tags)
+        gen_image(f".cache/input/{img_name}", f"{_save_path}/{img_name}", price, brand, off_tags)
 
     async_get(todo, download_and_edit)
 
@@ -202,17 +202,19 @@ def do_sub_category(category, sub_cat):
 
 
 def init():
-    assert_folder("input")
+    assert_folder(".cache")
+
+    assert_folder(".cache/input")
     assert_folder("results")
     rm_rf("results")
-    rm_rf("input")
+    rm_rf(".cache/input")
 
     return get_all_cats()
 
 
 def clean():
-    rm_rf("input")
-    os.rmdir("input")
+    rm_rf(".cache/input")
+    os.rmdir(".cache/input")
 
 
 def init_gui(all_cats):

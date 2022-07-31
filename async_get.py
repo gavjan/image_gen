@@ -71,7 +71,7 @@ def download_image(url, file_name, attempt=1):
 
 def fetch(session, job):
     if re.search(r"(jpg|jpeg|png|jfif|webp)$", job['url']):
-        download_image(job['url'], f"input/{job['img_name']}")
+        download_image(job['url'], f".cache/input/{job['img_name']}")
         return job
     else:
         with session.get(job['url']) as response:
