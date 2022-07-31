@@ -95,7 +95,6 @@ def main():
 
     run(cmd)
     run(make_audio(vid=".cache/no_audio.mov", music=music, count=count))
-    print(music)
 
 
 if __name__ == "__main__":
